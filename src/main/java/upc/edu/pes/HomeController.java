@@ -10,8 +10,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,7 +33,6 @@ import upc.edu.pes.model.Obra;
 public class HomeController {
 	
 	private  Long idObraGlobal;
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	JSONParser parser=new JSONParser();
 	
 	RestTemplate restTemplate = new RestTemplate();
@@ -65,7 +62,7 @@ public class HomeController {
 		return "listadoObras";
 	}
 	
-	@RequestMapping(value = "/consultarObra", method = RequestMethod.GET)
+	@RequestMapping(value = "/consultarObra", method = RequestMethod.POST)
 	public String getObra( @RequestParam("idObra") String idObra,  Model model) {
 		System.out.println("ID: " + idObra);
 		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra, String.class);
@@ -129,6 +126,7 @@ public class HomeController {
 		String titulo =request.getParameter("titulo");
 		String beacon =request.getParameter("beacon");
 		String autor =request.getParameter("autor");
+		System.out.println("AUTORRRRRRRRRRRR: " + autor);
 		String info =request.getParameter("info");
 		String estilo =request.getParameter("estilo");
 		String coleccion =request.getParameter("coleccion");
@@ -158,7 +156,7 @@ public class HomeController {
 		
 		return  "redirect:/";
 	}
-	@RequestMapping(value = "/showEditarObra", method = RequestMethod.GET)
+	@RequestMapping(value = "/showEditarObra", method = RequestMethod.POST)
 	public String editarObra( @RequestParam("idObra") String idObra,  Model model) {
 		idObraGlobal = Long.parseLong(idObra);
 		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/colecciones", String.class);
@@ -174,12 +172,25 @@ public class HomeController {
 		}catch (ParseException e) {
 			e.printStackTrace();
 		}
-		System.out.println("SIZE: " + colecciones.size());
-		
 		model.addAttribute("colecciones", colecciones);
 		
+		//OTRA LLAMADA
+				json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/autores", String.class);
+				jsonObject = null;
+				
+				List<Autor> autores = new ArrayList<Autor>();
+				try {
+				jArray = (JSONArray) parser.parse(json);
+					for (int i=0;i<jArray.size();i++) {
+					    jsonObject = (JSONObject) jArray.get(i);
+					    Autor aut= new Autor ((Long)jsonObject.get("id"), jsonObject.get("nombre").toString() + " " +jsonObject.get("apellidos").toString() );
+					    autores.add(aut);
+					}
+				}catch (ParseException e) {
+					e.printStackTrace();
+				}
+				model.addAttribute("autores", autores);
 		
-		System.out.println("ID: " + idObra);
 		json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra, String.class);
 		jsonObject = null;
 		try {
@@ -189,9 +200,11 @@ public class HomeController {
 			   
 			Obra o = new Obra(jsonObject.get("titulo").toString(), autorO,
 					((Long)jsonObject.get("beacon")),jsonObject.get("informacion").toString(), jsonObject.get("estilo").toString());
-			Object coleccion = jsonObject.get("coleccion");
-			if(coleccion != null) o.setColeccion(coleccion.toString());
-			System.out.println("COL: "+o.getColeccion());
+			JSONObject coleccion = (JSONObject) jsonObject.get("coleccion");
+			if(coleccion != null){
+				String col = coleccion.get("nombre").toString();
+				o.setColeccion(col);
+			}
 			model.addAttribute("obra", o);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -201,7 +214,7 @@ public class HomeController {
 	
 		return "editarObra";
 	}
-	@RequestMapping(value = "/borrarObra", method = RequestMethod.GET)
+	@RequestMapping(value = "/borrarObra", method = RequestMethod.POST)
 	public String borrarObra( @RequestParam("idObra") String idObra,  Model model) {
 		System.out.println("ID: " + idObra);
 		

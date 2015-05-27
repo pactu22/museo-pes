@@ -4,42 +4,66 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<style type = "text/css"> 
+		<%@include file = "/resources/css/menustyle.css"%>  
+	</style> 
+	<script type="text/javascript">
+		function validate(bool){
+ 			if (bool) {
+				return true;
+			}
+			else{
+				alert("Tienes que loguearte para poder realizar esta accion");
+				return false;
+			}
+		}
+	</script>
 <title>Listado de obras</title>
 </head>
 <h1>Gestion de contenidos</h1>
 <body>
-		 <FORM NAME="form1" METHOD="GET">
-         <INPUT TYPE="BUTTON" VALUE="Nueva Obra" onclick="location.href='/pes/showNuevaObra'">
-    	</FORM>
+<p>
+ <FORM NAME="form1" action="showNuevaObra.html" METHOD="GET">
+           				<input type="image" width="20%" height="20%"src="resources/images/new.png">
+    					</FORM>
 
+</p>
 		<div id="space">
-			<table class="table table-bordered table-hover table-striped">
+			<table id="listado">
 			<th>Obra</th>
    <th>Autor</th>
 
 				<c:forEach items="${obras}" var="obra">
-					<tr>
-						<td>
+					<tr class="alt">
+						<td class="otro">
 						<c:out value="${obra.titulo}" />  
 						</td>
-												<td>
+						<td class="otro">
 						<c:out value="${obra.autor.nombres}" />  
 						</td>
-						<td>
-						 <FORM NAME="form1" METHOD="GET">
-           				 <INPUT TYPE="BUTTON" VALUE="Consultar" onclick="location.href='/pes/consultarObra.html?idObra=${obra.id}'">
+						<div position:relative >
+						
+						<td class="but">
+						 <FORM NAME="form1" action="consultarObra.html?idObra=${obra.id}" METHOD="POST">
+           				<input type="image" width="20%" height="20%"src="resources/images/consultar.png">
     					</FORM>
 						</td>
-						<td>
-						 <FORM NAME="form2" METHOD=GET>
-           				 <INPUT TYPE="BUTTON" VALUE="Editar" onclick="location.href='/pes/showEditarObra.html?idObra=${obra.id}'">
+						
+						<td class="but">
+							 <FORM NAME="form2" action="showEditarObra.html?idObra=${obra.id}" METHOD=POST>
+						 <input type="image" width="20%" height="20%"src="resources/images/edit.png">
     					</FORM>
 						</td>
-						<td>
-						 <FORM NAME="form3" METHOD="GET">
-           				 <INPUT TYPE="BUTTON" VALUE="Borrar" onclick="location.href='/pes/borrarObra.html?idObra=${obra.id}'">
+    					
+    					<td class="but">
+							 <FORM NAME="form3" action="borrarObra.html?idObra=${obra.id}" METHOD=POST>
+						 <input type="image" width="20%" height="20%" src="resources/images/delete.png">
     					</FORM>
 						</td>
+    				
+						
+						</div>
+						
 					</tr>
 					</c:forEach>
 			</table>

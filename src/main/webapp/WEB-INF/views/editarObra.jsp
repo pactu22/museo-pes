@@ -18,7 +18,8 @@
 				</tr>
 				<tr>
 					<td>Autor:</td>
-					<td><input type="text" name="autor" value = "${obra.autor.id}"></td>
+					<td style="display:none"><input type = "hidden" name="autor" value = "${obra.autor.id}"></td>
+					<td><input type="text" name="autor" value = "${obra.autor.nombres}"></td>
 				</tr>
 				<tr>
 					<td>Beacon:</td>
@@ -37,15 +38,15 @@
 					 <td>
 						 <c:choose>
 						      <c:when test="${empty obra.coleccion}">
-						       <input list="coleccions" name="coleccion" value="Ninguna" >
+						       <input list="colecciones" name="coleccion" value="Ninguna" >
 						      </c:when>
 						
 						      <c:otherwise>
-						       <input list="coleccions" name="coleccion" value="${obra.coleccion}" >
+						       <input list="colecciones" name="coleccion" value="${obra.coleccion}" >
 						      </c:otherwise>	
-	</c:choose>
+						</c:choose>
 					
-					 <datalist id="coleccions">
+					 <datalist id="colecciones">
 					 <c:forEach items="${colecciones}" var="col">
                		 	<option value="${col}">
 					</c:forEach>

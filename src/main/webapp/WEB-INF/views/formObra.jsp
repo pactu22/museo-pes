@@ -14,7 +14,7 @@
 				style="margin-top: 5px">
 				<tr>
 					<td>Titulo:</td>
-					<td><input type="text" name="titulo"></td>
+					<td><input type="text" name="titulo"  ></td>
 				</tr>
 				<tr>
 					<td>Beacon:</td>
@@ -23,10 +23,11 @@
 
 				<tr>
 					<td>Autor:</td>
-					<td><input list="autor" name="autor" value="Selecciona un autor" >
+					<td><input list="autor" name="autor" value="Selecciona un autor" > </td>
 					 <datalist id="autor">
 					 <c:forEach items="${autores}" var="autor">
-               		 	<option value="${autor.nombres} ${autor.id}">
+               		 	<option value="${autor.nombres}" value="hola" >  ${autor.id} 
+               		 	
 					</c:forEach>
                		 </datalist>
 				</tr>
