@@ -5,55 +5,67 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type = "text/css"> 
+		<%@include file = "/resources/css/menustyle.css"%>  
+	</style> 
+		<script type="text/javascript">
+		function validate(){
+ 			if (document.nuevaobra.titulo.value == "" | 
+ 					document.nuevaobra.titulo.beacon == "" |
+ 					document.nuevaobra.autor.value == "" |
+ 					document.nuevaobra.info.value == "" |
+ 					document.nuevaobra.estilo.value == ""
+ 					
+ 			) {
+ 				alert("Faltan campos a rellenar");
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+	</script>
 <title>Insert title here</title>
 </head>
-<body>
-<div id="space">
-		<form  name="obraForm"  action="nuevaObra" method="post" id="obraForm">
-			<table cellspacing="5" cellpadding="0" border="0"
-				style="margin-top: 5px">
-				<tr>
-					<td>Titulo:</td>
-					<td><input type="text" name="titulo"  ></td>
-				</tr>
-				<tr>
-					<td>Beacon:</td>
-					<td><input type="text" name="beacon"></td>
-				</tr>
-
-				<tr>
-					<td>Autor:</td>
-					<td><input list="autor" name="autor" value="Selecciona un autor" > </td>
+<body >
+<div  >
+	<h1>Nueva Obra</h1>
+		<form name="nuevaobra" class ="idform" action="nuevaObra" onsubmit="return validate();" method="post" id="obraForm">
+				<p><label>Titulo</label>
+					<input type="text" name="titulo" placeholder="Introduzca titulo"  >
+				</p>
+					
+				<p><label>Beacon</label>
+				
+					<input type="text" name="beacon" placeholder="Introduzca beacon"  ></p>
+				<p><label>Autor</label>
+				
+					<input list="autor" name="autor" value="Selecciona un autor" >
 					 <datalist id="autor">
 					 <c:forEach items="${autores}" var="autor">
                		 	<option value="${autor.nombres}" value="hola" >  ${autor.id} 
                		 	
 					</c:forEach>
                		 </datalist>
-				</tr>
-				<tr>
-					<td>Informacion:</td>
-					<td><input type="text" name="info"></td>
-				</tr>
-				<tr>
-					<td>Estilo:</td>
-					<td><input type="text" name="estilo"></td>
-				</tr>
-				<tr>
-					<td>Coleccion:</td>
-					 <td><input list="coleccion" name="coleccion" value="Ninguna" >
+				</p>
+				
+				<p><label>Informacion</label>
+					<input type="text" name="info" placeholder="Introduzca informacion"  >
+				</p>
+				
+				<p><label>Estilo</label>
+					<input type="text" name="estilo" placeholder="Introduzca estilo"  >
+				</p>
+				
+				<p><label>Coleccion</label>
+					<input list="coleccion" name="coleccion" value="Ninguna" >
 					 <datalist id="coleccion">
 					 <c:forEach items="${colecciones}" var="col">
                		 	<option value="${col}">
 					</c:forEach>
                		 </datalist>
-            </td>
-				</tr>
-
-				<tr>
-					<td><input type="submit" value="Crear obra" id="crear" /></td>
-				</tr>
-			</table>
+				</p>
+				<p> <input type="submit" value="Crear obra" id="crear" /></p>
 		</form>
 	</div>
 </body>

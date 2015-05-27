@@ -37,3 +37,27 @@ h1 {
     background-color: #EAF2D3;
 }
 
+
+.idform { 
+	
+
+display: block; 
+background: #FAFAFA; 
+
+position: absolute;
+left: 50%;
+top: 50%;
+text-align: center;        
+width:546px;
+height:265px;
+margin-left: -273px; /*half width*/
+margin-top: -132px; /*half height*/;
+border-radius: 25px;
+border: 2px solid blue;
+
+}
+
+.idform p{
+
+	 color: #336699;
+}

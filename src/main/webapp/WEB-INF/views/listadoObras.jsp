@@ -7,24 +7,14 @@
 	<style type = "text/css"> 
 		<%@include file = "/resources/css/menustyle.css"%>  
 	</style> 
-	<script type="text/javascript">
-		function validate(bool){
- 			if (bool) {
-				return true;
-			}
-			else{
-				alert("Tienes que loguearte para poder realizar esta accion");
-				return false;
-			}
-		}
-	</script>
+
 <title>Listado de obras</title>
 </head>
 <h1>Gestion de contenidos</h1>
 <body>
 <p>
  <FORM NAME="form1" action="showNuevaObra.html" METHOD="GET">
-           				<input type="image" width="20%" height="20%"src="resources/images/new.png">
+           				<input type="image" src="resources/images/new.png">
     					</FORM>
 
 </p>
