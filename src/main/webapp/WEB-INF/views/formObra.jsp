@@ -30,6 +30,7 @@
 <body >
 <div  >
 	<h1>Nueva Obra</h1>
+	
 		<form name="nuevaobra" class ="idform" action="nuevaObra" onsubmit="return validate();" method="post" id="obraForm">
 				<p><label>Titulo</label>
 					<input type="text" name="titulo" placeholder="Introduzca titulo"  >
