@@ -11,7 +11,7 @@
 		<script type="text/javascript">
 		function validate(){
  			if (document.nuevaobra.titulo.value == "" | 
- 					document.nuevaobra.titulo.beacon == "" |
+ 					document.nuevaobra.titulo.value == "" |
  					document.nuevaobra.autor.value == "" |
  					document.nuevaobra.info.value == "" |
  					document.nuevaobra.estilo.value == ""
