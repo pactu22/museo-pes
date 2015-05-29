@@ -274,5 +274,22 @@ public class HomeController {
 	}
 	
 	
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String getRegistrationFrom(Model model){
+		model.addAttribute("obra", new Obra());
+
+		return "registrationForm";
+	}
+	@RequestMapping(value = "newObra", method = RequestMethod.POST)
+	public String postRegistrationForm(Obra form, Model model) {
+		System.out.println("ALGOO");
+		model.addAttribute("titulo", form.getTitulo());
+        model.addAttribute("autor", "autor de prueba");
+        model.addAttribute("estilo", form.getEstilo());
+        model.addAttribute("coleccion", form.getColeccion());
+		return "registration_ok";
+	}
+	 
+	
 	
 }
