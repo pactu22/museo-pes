@@ -83,41 +83,41 @@ public class HomeController {
 		}
 		return "obra";
 	}
+	
 	@RequestMapping(value = "/showNuevaObra", method = RequestMethod.GET)
 	public String nuevaObra(Model model) {
-		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/colecciones", String.class);
-		JSONObject jsonObject = null;
-		JSONArray jArray;
-		List<String> colecciones = new ArrayList<String>();
+		
+		String json =restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/autoresycolecciones", String.class);
+		JSONObject jsonO;
+		JSONArray jArrayAutores = null;
+		JSONArray jArrayColecciones = null;
 		try {
-			jArray = (JSONArray) parser.parse(json);
-			for (int i=0;i<jArray.size();i++) {
-			    jsonObject = (JSONObject) jArray.get(i);
-			    colecciones.add(jsonObject.get("nombre").toString());
+			jsonO = (JSONObject) parser.parse(json);
+			jArrayAutores = (JSONArray)jsonO.get("autores");
+			System.out.println("AUTORES: " + jArrayAutores.toString());
+			
+			jArrayColecciones = (JSONArray)jsonO.get("colecciones");
+			System.out.println("COLS: " + jArrayColecciones.toString());
+			List<String> colecciones = new ArrayList<String>();
+			for (int i=0;i<jArrayColecciones.size();i++) {
+				jsonO = (JSONObject) jArrayColecciones.get(i);
+			    colecciones.add(jsonO.get("nombre").toString());
 			}
-		}catch (ParseException e) {
-			e.printStackTrace();
-		}
-		System.out.println("SIZE: COL " + colecciones.size());
-		
-		model.addAttribute("colecciones", colecciones);
-		
-		//OTRA LLAMADA
-		json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/autores", String.class);
-		jsonObject = null;
-		
-		List<Autor> autores = new ArrayList<Autor>();
-		try {
-		jArray = (JSONArray) parser.parse(json);
-			for (int i=0;i<jArray.size();i++) {
-			    jsonObject = (JSONObject) jArray.get(i);
-			    Autor aut= new Autor ((Long)jsonObject.get("id"), jsonObject.get("nombre").toString() + " " +jsonObject.get("apellidos").toString() );
+			model.addAttribute("colecciones", colecciones);
+			
+			List<Autor> autores = new ArrayList<Autor>();
+			for (int i=0;i<jArrayAutores.size();i++) {
+			    jsonO = (JSONObject) jArrayAutores.get(i);
+			    Autor aut= new Autor ((Long)jsonO.get("id"), jsonO.get("nombre").toString() + " " +jsonO.get("apellidos").toString() );
 			    autores.add(aut);
 			}
-		}catch (ParseException e) {
+			model.addAttribute("autores", autores);
+				
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		model.addAttribute("autores", autores);
+		
+			
 		return "formObra";
 	}
 	
@@ -159,40 +159,40 @@ public class HomeController {
 	@RequestMapping(value = "/showEditarObra", method = RequestMethod.POST)
 	public String editarObra( @RequestParam("idObra") String idObra,  Model model) {
 		idObraGlobal = Long.parseLong(idObra);
-		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/colecciones", String.class);
-		JSONObject jsonObject = null;
-		JSONArray jArray;
-		List<String> colecciones = new ArrayList<String>();
+		
+		String json =restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/autoresycolecciones", String.class);
+		JSONObject jsonO;
+		JSONArray jArrayAutores = null;
+		JSONArray jArrayColecciones = null;
 		try {
-			jArray = (JSONArray) parser.parse(json);
-			for (int i=0;i<jArray.size();i++) {
-			    jsonObject = (JSONObject) jArray.get(i);
-			    colecciones.add(jsonObject.get("nombre").toString());
+			jsonO = (JSONObject) parser.parse(json);
+			jArrayAutores = (JSONArray)jsonO.get("autores");
+			System.out.println("AUTORES: " + jArrayAutores.toString());
+			
+			jArrayColecciones = (JSONArray)jsonO.get("colecciones");
+			System.out.println("COLS: " + jArrayColecciones.toString());
+			List<String> colecciones = new ArrayList<String>();
+			for (int i=0;i<jArrayColecciones.size();i++) {
+				jsonO = (JSONObject) jArrayColecciones.get(i);
+			    colecciones.add(jsonO.get("nombre").toString());
 			}
-		}catch (ParseException e) {
+			model.addAttribute("colecciones", colecciones);
+			
+			List<Autor> autores = new ArrayList<Autor>();
+			for (int i=0;i<jArrayAutores.size();i++) {
+			    jsonO = (JSONObject) jArrayAutores.get(i);
+			    Autor aut= new Autor ((Long)jsonO.get("id"), jsonO.get("nombre").toString() + " " +jsonO.get("apellidos").toString() );
+			    autores.add(aut);
+			}
+			model.addAttribute("autores", autores);
+				
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		model.addAttribute("colecciones", colecciones);
 		
-		//OTRA LLAMADA
-				json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/autores", String.class);
-				jsonObject = null;
-				
-				List<Autor> autores = new ArrayList<Autor>();
-				try {
-				jArray = (JSONArray) parser.parse(json);
-					for (int i=0;i<jArray.size();i++) {
-					    jsonObject = (JSONObject) jArray.get(i);
-					    Autor aut= new Autor ((Long)jsonObject.get("id"), jsonObject.get("nombre").toString() + " " +jsonObject.get("apellidos").toString() );
-					    autores.add(aut);
-					}
-				}catch (ParseException e) {
-					e.printStackTrace();
-				}
-				model.addAttribute("autores", autores);
-		
+
 		json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra, String.class);
-		jsonObject = null;
+		JSONObject jsonObject = null;
 		try {
 			jsonObject = (JSONObject) parser.parse(json);
 			JSONObject autor = (JSONObject) jsonObject.get("autor");
@@ -210,8 +210,6 @@ public class HomeController {
 			e.printStackTrace();
 		}
 		
-		
-	
 		return "editarObra";
 	}
 	@RequestMapping(value = "/borrarObra", method = RequestMethod.POST)
