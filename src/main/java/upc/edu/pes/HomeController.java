@@ -98,6 +98,7 @@ public class HomeController {
 			jArrayColecciones = (JSONArray)jsonO.get("colecciones");
 			System.out.println("COLS: " + jArrayColecciones.toString());
 			List<String> colecciones = new ArrayList<String>();
+			colecciones.add("Ninguna");
 			for (int i=0;i<jArrayColecciones.size();i++) {
 				jsonO = (JSONObject) jArrayColecciones.get(i);
 			    colecciones.add(jsonO.get("nombre").toString());
@@ -178,6 +179,7 @@ public class HomeController {
 			jArrayColecciones = (JSONArray)jsonO.get("colecciones");
 			System.out.println("COLS: " + jArrayColecciones.toString());
 			List<String> colecciones = new ArrayList<String>();
+			colecciones.add("Ninguna");
 			for (int i=0;i<jArrayColecciones.size();i++) {
 				jsonO = (JSONObject) jArrayColecciones.get(i);
 			    colecciones.add(jsonO.get("nombre").toString());

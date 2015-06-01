@@ -53,7 +53,6 @@
 				
 				<p><label>Coleccion</label>
 					 <form:select path="coleccion" >
-					 <form:option value="Ninguna" />
 					 <form:options items="${colecciones}" />
 					   </form:select>
 				</p>
