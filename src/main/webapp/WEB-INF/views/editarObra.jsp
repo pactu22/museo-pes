@@ -32,7 +32,7 @@
 	<c:choose>
       <c:when test="${edit ==true}"> true
       <h1>Editar Obra</h1>
-      	<form:form action="editarObra" class ="idform"  modelAttribute="obra" name="editarobra" onsubmit="return validate()" >
+      	<form:form action="editarObra" class ="idform"  modelAttribute="obra" enctype="multipart/form-data" name="editarobra" onsubmit="return validate()" >
 				<p><label>Título: </label>
 					<form:input path="titulo"/>
 				</p>					
@@ -54,6 +54,17 @@
 				<p><label>Colección: </label>
 					 <form:select path="coleccion" items="${colecciones}" />
 				</p>
+				
+				<p><label>Multimedia 1</label>
+					<form:input path="item1" type="file" />
+				</p>
+				<p><label>Multimedia 2</label>
+					<form:input path="item2" type="file" />
+				</p>
+				<p><label>Multimedia 3</label>
+					<form:input path="item3" type="file" />
+				</p>
+				
 				<p> <input type="submit" value="Editar obra" id="editar" /></p>
 		</form:form>
       </c:when>

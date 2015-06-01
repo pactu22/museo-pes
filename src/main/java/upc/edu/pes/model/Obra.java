@@ -1,5 +1,7 @@
 package upc.edu.pes.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Obra {
 
 	private Long id;
@@ -13,6 +15,11 @@ public class Obra {
 	
 	// Un campo extra para facilitar el manejo de id el autor
 	private Long autorId;
+	
+	private MultipartFile item1;
+	private MultipartFile item2;
+	private MultipartFile item3;
+	
 	
 	public Obra(){
 		
@@ -81,6 +88,24 @@ public class Obra {
 		this.autorId = autorId;
 	}
 	
+	public MultipartFile getItem1() {
+		return item1;
+	}
+	public void setItem1(MultipartFile item1) {
+		this.item1 = item1;
+	}
+	public MultipartFile getItem2() {
+		return item2;
+	}
+	public void setItem2(MultipartFile item2) {
+		this.item2 = item2;
+	}
+	public MultipartFile getItem3() {
+		return item3;
+	}
+	public void setItem3(MultipartFile item3) {
+		this.item3 = item3;
+	}
 	
 	@Override
 	public String toString() {

@@ -1,5 +1,6 @@
 package upc.edu.pes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import upc.edu.pes.model.Autor;
+import upc.edu.pes.model.MultimediaItem;
 import upc.edu.pes.model.Obra;
 
 /**
@@ -239,28 +241,10 @@ public class HomeController {
 	@RequestMapping(value = "/editarObra", method=RequestMethod.POST)
 	public String doEdit(Obra obra) {  // Ahora pasamos el objeto Obra
 		System.out.println("idGLOB: " + idObraGlobal);
-		
-		/*
-		String titulo =request.getParameter("titulo");
-		String beacon =request.getParameter("beacon");
-		String info =request.getParameter("info");
-		String estilo =request.getParameter("estilo");
-		String coleccion =request.getParameter("coleccion");
-		String autor = request.getParameter("autor");
-		*/
+	
 		
 		JSONObject jsonObject = new JSONObject();
-		
-		
-		jsonObject.put("titulo", obra.getTitulo());
-		jsonObject.put("idBeacon", obra.getBeacon());
-		jsonObject.put("estilo", obra.getEstilo());
-		jsonObject.put("idAutor", obra.getAutorId());
-		jsonObject.put("informacion", obra.getInformacion());
-		
-		if (!"Ninguna".equals(obra.getColeccion())) {
-			jsonObject.put("nombreColeccion", obra.getColeccion());
-		}
+		putDataInJson(obra,jsonObject);
 		
 		String url = "http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObraGlobal;
 		System.out.println("URL: " +url);
@@ -320,6 +304,60 @@ public class HomeController {
 		return "registration_ok";
 	}
 	 
+	// Helper para no repetir codigo
+	
+	private void putDataInJson(Obra obra,JSONObject jsonObject) {
+		
+		List<MultimediaItem> items = new ArrayList<MultimediaItem>();
+		
+		if (obra.getItem1().getSize() > 0) {
+    		try {
+    			MultimediaItem item = new MultimediaItem();
+    			item.setId(obra.getItem1().getOriginalFilename());
+    			item.setContent(obra.getItem1().getBytes());
+    			items.add(item);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		 
+		if (obra.getItem2().getSize() > 0) {
+    		try {
+    			MultimediaItem item = new MultimediaItem();
+    			item.setId(obra.getItem2().getOriginalFilename());
+    			item.setContent(obra.getItem2().getBytes());
+    			items.add(item);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (obra.getItem3().getSize() > 0) {
+    		try {
+    			MultimediaItem item = new MultimediaItem();
+    			item.setId(obra.getItem3().getOriginalFilename());
+    			item.setContent(obra.getItem3().getBytes());
+    			items.add(item);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Mutimedia items:"+ items.size());
+		
+		jsonObject.put("titulo", obra.getTitulo());
+		jsonObject.put("idBeacon", obra.getBeacon());
+		jsonObject.put("estilo", obra.getEstilo());
+		jsonObject.put("idAutor", obra.getAutorId());
+		jsonObject.put("informacion", obra.getInformacion());
+		//jsonObject.put("items", items);
+		
+		if (!"Ninguna".equals(obra.getColeccion())) {
+			jsonObject.put("nombreColeccion", obra.getColeccion());
+		}
+	}	
+	
 	
 	
 }
