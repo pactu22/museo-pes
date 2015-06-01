@@ -3,6 +3,8 @@ package upc.edu.pes;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -62,7 +64,9 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/consultarObra", method = RequestMethod.POST)
-	public String getObra( @RequestParam("idObra") String idObra,  Model model) {
+	public String getObra( @RequestParam("idObra") String idObra,  Model model, HttpSession session) {
+		
+		
 		System.out.println("ID: " + idObra);
 		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra, String.class);
 		JSONObject jsonObject = null;
@@ -80,7 +84,10 @@ public class HomeController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return "obra";
+
+		session.removeAttribute("edit");
+		session.setAttribute("edit", false);
+		return "editarObra";
 	}
 	
 	@RequestMapping(value = "/showNuevaObra", method = RequestMethod.GET)
@@ -164,7 +171,7 @@ public class HomeController {
 	
 	
 	@RequestMapping(value = "/showEditarObra", method = RequestMethod.POST)
-	public String editarObra( @RequestParam("idObra") String idObra,  Model model) {
+	public String editarObra( @RequestParam("idObra") String idObra,  Model model, HttpSession session) {
 		idObraGlobal = Long.parseLong(idObra);
 		
 		String json =restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/autoresycolecciones", String.class);
@@ -223,7 +230,8 @@ public class HomeController {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+		session.removeAttribute("edit");
+		session.setAttribute("edit", true);
 		return "editarObra";
 	}
 	

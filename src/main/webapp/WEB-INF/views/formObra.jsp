@@ -9,13 +9,12 @@
 	</style> 
 		<script type="text/javascript">
 		function validate(){
- 			if (document.nuevaobra.titulo.value == "" | 
- 					document.nuevaobra.titulo.value == "" |
- 					document.nuevaobra.autor.value == "" |
- 					document.nuevaobra.info.value == "" |
- 					document.nuevaobra.estilo.value == ""
- 					
- 			) {
+			var titulo = document.nuevaobra.titulo.value;
+			var info = document.nuevaobra.informacion.value;
+			var estilo = document.nuevaobra.estilo.value;
+			var beacon = document.nuevaobra.beacon.value;
+			if (titulo==null | titulo=="" | info==null | info=="" | estilo==null | estilo=="" | beacon==null | beacon=="")							
+ 			{
  				alert("Faltan campos a rellenar");
 				return false;
 			}
@@ -24,37 +23,35 @@
 			}
 		}
 	</script>
-<title>Insert title here</title>
+<title>Nueva Obra</title>
 </head>
 <body >
 <div  >
 	<h1>Nueva Obra</h1>
 	
-		<form:form action="nuevaObra" modelAttribute="obra" onsubmit="return validate();">
-				<p><label>Titulo</label>
-					<form:input path="titulo" placeholder="Introduzca titulo" />
+		<form:form action="nuevaObra" class ="idform" modelAttribute="obra" name="nuevaobra" onsubmit="return validate()">
+				<p><label>Título: </label>
+					<form:input path="titulo" placeholder="Introduzca titulo"/>
 				</p>
 					
-				<p><label>Beacon</label>				
+				<p><label>Beacon: </label>				
 					<form:input path="beacon" placeholder="Introduzca beacon" />
 				</p>
 				
-				<p><label>Autor</label>
+				<p><label>Autor: </label>
 					<form:select path="autorId" items="${autores}" itemValue="id" itemLabel="nombres" />
 				</p>
 				
-				<p><label>Informacion</label>
-					<form:input path="informacion" placeholder="Introduzca informacion" />
+				<p><label>Información: </label>
+					<form:textarea path="informacion" rows="4" cols="30" placeholder="Introduzca informacion" />
 				</p>
 				
-				<p><label>Estilo</label>
+				<p><label>Estilo: </label>
 					<form:input path="estilo" placeholder="Introduzca estilo" />
 				</p>
 				
-				<p><label>Coleccion</label>
-					 <form:select path="coleccion" >
-					 <form:options items="${colecciones}" />
-					   </form:select>
+				<p><label>Colección: </label>
+					 <form:select path="coleccion" items="${colecciones}" />
 				</p>
 				
 				<p> <input type="submit" value="Crear obra" id="crear" /></p>
