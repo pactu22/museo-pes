@@ -11,6 +11,9 @@ public class Obra {
 	private String estilo;
 	private String coleccion;
 	
+	// Un campo extra para facilitar el manejo de id el autor
+	private Long autorId;
+	
 	public Obra(){
 		
 	}
@@ -69,6 +72,16 @@ public class Obra {
 	public void setColeccion(String coleccion) {
 		this.coleccion = coleccion;
 	}
+	
+	
+	public Long getAutorId() {
+		return autorId;
+	}
+	public void setAutorId(Long autorId) {
+		this.autorId = autorId;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Obra [id=" + id + ", titulo=" + titulo + ", autor=" + autor

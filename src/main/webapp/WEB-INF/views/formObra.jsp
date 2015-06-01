@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -32,43 +30,36 @@
 <div  >
 	<h1>Nueva Obra</h1>
 	
-		<form name="nuevaobra" class ="idform" action="nuevaObra" onsubmit="return validate();" method="post" id="obraForm">
+		<form:form action="nuevaObra" modelAttribute="obra" onsubmit="return validate();">
 				<p><label>Titulo</label>
-					<input type="text" name="titulo" placeholder="Introduzca titulo"  >
+					<form:input path="titulo" placeholder="Introduzca titulo" />
 				</p>
 					
-				<p><label>Beacon</label>
+				<p><label>Beacon</label>				
+					<form:input path="beacon" placeholder="Introduzca beacon" />
+				</p>
 				
-					<input type="text" name="beacon" placeholder="Introduzca beacon"  ></p>
 				<p><label>Autor</label>
-				
-					<input list="autor" name="autor" value="Selecciona un autor" >
-					 <datalist id="autor">
-					 <c:forEach items="${autores}" var="autor">
-               		 	<option value="${autor.nombres}" value="hola" >  ${autor.id} 
-               		 	
-					</c:forEach>
-               		 </datalist>
+					<form:select path="autorId" items="${autores}" itemValue="id" itemLabel="nombres" />
 				</p>
 				
 				<p><label>Informacion</label>
-					<input type="text" name="info" placeholder="Introduzca informacion"  >
+					<form:input path="informacion" placeholder="Introduzca informacion" />
 				</p>
 				
 				<p><label>Estilo</label>
-					<input type="text" name="estilo" placeholder="Introduzca estilo"  >
+					<form:input path="estilo" placeholder="Introduzca estilo" />
 				</p>
 				
 				<p><label>Coleccion</label>
-					<input list="coleccion" name="coleccion" value="Ninguna" >
-					 <datalist id="coleccion">
-					 <c:forEach items="${colecciones}" var="col">
-               		 	<option value="${col}">
-					</c:forEach>
-               		 </datalist>
+					 <form:select path="coleccion" >
+					 <form:option value="Ninguna" />
+					 <form:options items="${colecciones}" />
+					   </form:select>
 				</p>
+				
 				<p> <input type="submit" value="Crear obra" id="crear" /></p>
-		</form>
+		</form:form>
 	</div>
 </body>
 </html>

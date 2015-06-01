@@ -3,9 +3,6 @@ package upc.edu.pes;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -38,7 +35,9 @@ public class HomeController {
 	RestTemplate restTemplate = new RestTemplate();
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String listadoAllObras( Model model) {
+	public String listadoAllObras(Model model) {
+		
+		System.out.println("Home: punto de entrada - Lista todas las obras existentes");
 
 		String json = restTemplate.getForObject("http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras", String.class);
 		System.out.println("JSON: " + json);
@@ -111,7 +110,10 @@ public class HomeController {
 			    Autor aut= new Autor ((Long)jsonO.get("id"), jsonO.get("nombre").toString() + " " +jsonO.get("apellidos").toString() );
 			    autores.add(aut);
 			}
+			
 			model.addAttribute("autores", autores);
+			
+			model.addAttribute("obra", new Obra()); // le pasamos el objeto principal vacio
 				
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -122,22 +124,24 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/nuevaObra", method=RequestMethod.POST)
-	public String doSubmit(HttpServletRequest request, Model model, HttpSession session) {
-		String titulo =request.getParameter("titulo");
-		String beacon =request.getParameter("beacon");
-		String autor =request.getParameter("autor");
-		System.out.println("AUTORRRRRRRRRRRR: " + autor);
-		String info =request.getParameter("info");
-		String estilo =request.getParameter("estilo");
-		String coleccion =request.getParameter("coleccion");
-		System.out.println(" " + titulo + " " +beacon + " " +autor+ " " +info+ " " +estilo+ " " +coleccion);
+	public String doSubmit(Obra obra) {  // Ahora pasamos el objeto Obra
+	
+		
+		System.out.println(" " + obra.getTitulo() + " " + obra.getBeacon() + " " +obra.getAutorId()+ " " 
+				+obra.getInformacion()+ " " +obra.getEstilo()+ " " + obra.getColeccion());
+	
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("titulo", titulo);
-		jsonObject.put("idBeacon", Long.parseLong(beacon));
-		jsonObject.put("estilo", estilo);
-		jsonObject.put("idAutor", 1);
-		if(!coleccion.equals("Ninguna"))jsonObject.put("nombreColeccion", coleccion);
-		jsonObject.put("informacion", info);
+		
+		jsonObject.put("titulo", obra.getTitulo());
+		jsonObject.put("idBeacon", obra.getBeacon());
+		jsonObject.put("estilo", obra.getEstilo());
+		jsonObject.put("idAutor", obra.getAutorId());
+		jsonObject.put("informacion", obra.getInformacion());
+		
+		if (!"Ninguna".equals(obra.getColeccion())) {
+			jsonObject.put("nombreColeccion", obra.getColeccion());
+		}
+		
 		
 		String url = "http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras";
 		
@@ -156,6 +160,8 @@ public class HomeController {
 		
 		return  "redirect:/";
 	}
+	
+	
 	@RequestMapping(value = "/showEditarObra", method = RequestMethod.POST)
 	public String editarObra( @RequestParam("idObra") String idObra,  Model model) {
 		idObraGlobal = Long.parseLong(idObra);
@@ -198,58 +204,53 @@ public class HomeController {
 			JSONObject autor = (JSONObject) jsonObject.get("autor");
 			Autor autorO = new Autor(Long.parseLong(autor.get("id").toString()), autor.get("nombre").toString() +" " + autor.get("apellidos").toString());
 			   
-			Obra o = new Obra(jsonObject.get("titulo").toString(), autorO,
+			Obra obra = new Obra(jsonObject.get("titulo").toString(), autorO,
 					((Long)jsonObject.get("beacon")),jsonObject.get("informacion").toString(), jsonObject.get("estilo").toString());
+			
+			obra.setAutorId(autorO.getId());  // esto es importante
+			
 			JSONObject coleccion = (JSONObject) jsonObject.get("coleccion");
 			if(coleccion != null){
 				String col = coleccion.get("nombre").toString();
-				o.setColeccion(col);
+				obra.setColeccion(col);
 			}
-			model.addAttribute("obra", o);
+			else obra.setColeccion("Ninguna");
+			System.out.println("EDITANDO: "+ obra.toString());
+			model.addAttribute("obra", obra);
+			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		
 		return "editarObra";
 	}
-	@RequestMapping(value = "/borrarObra", method = RequestMethod.POST)
-	public String borrarObra( @RequestParam("idObra") String idObra,  Model model) {
-		System.out.println("ID: " + idObra);
-		
-		String url = "http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra+"/borrar";
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		ResponseEntity<String> loginResponse = restTemplate
-				  .exchange(url, HttpMethod.POST, null, String.class);
-		
-		if (loginResponse.getStatusCode() == HttpStatus.OK) {
-				  System.out.println("TODO BIEN" );
-				} else if (loginResponse.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-				  // nono... bad credentials
-					System.out.println("TODO MAL");
-			}
-				
-		return "redirect:/";
-	}
-
+	
 	
 	@RequestMapping(value = "/editarObra", method=RequestMethod.POST)
-	public String doEdit(HttpServletRequest request, Model model, HttpSession session) {
+	public String doEdit(Obra obra) {  // Ahora pasamos el objeto Obra
 		System.out.println("idGLOB: " + idObraGlobal);
+		
+		/*
 		String titulo =request.getParameter("titulo");
 		String beacon =request.getParameter("beacon");
 		String info =request.getParameter("info");
 		String estilo =request.getParameter("estilo");
 		String coleccion =request.getParameter("coleccion");
 		String autor = request.getParameter("autor");
+		*/
+		
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("titulo", titulo);
-		jsonObject.put("idBeacon", Long.parseLong(beacon));
-		jsonObject.put("estilo", estilo);
-		jsonObject.put("idAutor", Long.parseLong(autor));
-		if(!coleccion.equals("Ninguna"))jsonObject.put("nombreColeccion", coleccion);
-		jsonObject.put("informacion", info);
+		
+		
+		jsonObject.put("titulo", obra.getTitulo());
+		jsonObject.put("idBeacon", obra.getBeacon());
+		jsonObject.put("estilo", obra.getEstilo());
+		jsonObject.put("idAutor", obra.getAutorId());
+		jsonObject.put("informacion", obra.getInformacion());
+		
+		if (!"Ninguna".equals(obra.getColeccion())) {
+			jsonObject.put("nombreColeccion", obra.getColeccion());
+		}
 		
 		String url = "http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObraGlobal;
 		System.out.println("URL: " +url);
@@ -271,6 +272,27 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
+	
+	@RequestMapping(value = "/borrarObra", method = RequestMethod.POST)
+	public String borrarObra( @RequestParam("idObra") String idObra,  Model model) {
+		System.out.println("ID: " + idObra);
+		
+		String url = "http://museo-project.herokuapp.com/rest/museos/Museo Principal/obras/"+idObra+"/borrar";
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		ResponseEntity<String> loginResponse = restTemplate
+				  .exchange(url, HttpMethod.POST, null, String.class);
+		
+		if (loginResponse.getStatusCode() == HttpStatus.OK) {
+				  System.out.println("TODO BIEN" );
+				} else if (loginResponse.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+				  // nono... bad credentials
+					System.out.println("TODO MAL");
+			}
+				
+		return "redirect:/";
+	}
 	
 	@RequestMapping(value = "/new", method = RequestMethod.GET)
 	public String getRegistrationFrom(Model model){
