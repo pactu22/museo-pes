@@ -6,6 +6,11 @@ h1 {
 	text-decoration: underline;
 }
 
+body {
+	 	background-image:url('resources/images/background2.png');
+	 	
+   
+}
 #listado {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	width: 100%;
@@ -45,7 +50,7 @@ h1 {
 	left: 50%;
 	top: 50%;
 	text-align: center;
-	width: 546px;
+	width: 546px;	
 	height: 350px;
 	margin-left: -273px; /*half width*/
 	margin-top: -132px; /*half height*/;
